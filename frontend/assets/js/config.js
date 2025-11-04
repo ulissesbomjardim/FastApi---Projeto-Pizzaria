@@ -2,7 +2,7 @@
 const CONFIG = {
     // API Configuration
     API: {
-        BASE_URL: window.location.hostname === 'localhost' ? 'http://172.25.132.243:8000' : 'http://172.25.132.243:8000',
+        BASE_URL: window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'http://localhost:8000',
         ENDPOINTS: {
             // Authentication
             LOGIN: '/auth/login',

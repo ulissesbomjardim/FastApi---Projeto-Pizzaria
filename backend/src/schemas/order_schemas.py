@@ -26,6 +26,11 @@ class ItemSize(str, Enum):
     MEDIA = 'media'
     GRANDE = 'grande'
     FAMILIA = 'familia'
+    UNICO = 'unico'
+    ML_350 = '350ml'
+    ML_500 = '500ml'
+    L_1 = '1l'
+    L_2 = '2l'
 
 
 class OrderStatus(str, Enum):

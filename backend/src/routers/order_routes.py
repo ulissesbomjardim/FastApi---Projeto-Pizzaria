@@ -15,6 +15,15 @@ from ..schemas.order_schemas import OrderCreate, OrderResponse, OrderSummary, Or
 order_router = APIRouter(prefix='/orders', tags=['orders'])
 
 
+def safe_float(value, decimal_places=2):
+    """Converte Decimal/float para float garantindo casas decimais corretas"""
+    if isinstance(value, Decimal):
+        return float(round(value, decimal_places))
+    elif isinstance(value, (int, float)):
+        return float(round(Decimal(str(value)), decimal_places))
+    return float(value)
+
+
 @order_router.get('/')
 async def home():
     """
@@ -517,7 +526,7 @@ async def add_item_to_order(
             
             # Recalcular valores
             unit_price = Decimal(str(item.price))
-            existing_order_item.total_price = float(unit_price * Decimal(str(existing_order_item.quantity)))
+            existing_order_item.total_price = safe_float(unit_price * Decimal(str(existing_order_item.quantity)))
             
             # Atualizar observações se fornecidas
             if item_data.observations:
@@ -536,8 +545,8 @@ async def add_item_to_order(
                 order_id=order_id,
                 item_id=item_data.item_id,
                 quantity=item_data.quantity,
-                unit_price=float(unit_price),
-                total_price=float(total_price),
+                unit_price=safe_float(unit_price),
+                total_price=safe_float(total_price),
                 notes=item_data.observations
             )
             
