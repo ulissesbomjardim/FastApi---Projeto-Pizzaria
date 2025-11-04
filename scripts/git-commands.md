@@ -5,8 +5,8 @@
 # Inicializar Git (já feito se clonou)
 git init
 
-# Adicionar origin (substitua pela sua URL)
-git remote add origin https://github.com/SEU_USUARIO/hashtag-pizzaria.git
+# Adicionar origin (URL do projeto)
+git remote add origin https://github.com/ulissesbomjardim/FastApi---Projeto-Pizzaria.git
 
 # Primeiro commit
 git add .

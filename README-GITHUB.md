@@ -4,8 +4,8 @@
 
 ### 1️⃣ **Clone e Configure**
 ```bash
-git clone https://github.com/SEU_USUARIO/hashtag-pizzaria.git
-cd hashtag-pizzaria
+git clone https://github.com/ulissesbomjardim/FastApi---Projeto-Pizzaria.git
+cd "FastApi - Projeto Pizzaria"
 cp .env.example .env
 ```
 
