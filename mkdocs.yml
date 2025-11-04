@@ -1,11 +1,11 @@
 site_name: 🍕 Hashtag Pizzaria - Documentação
 site_description: Sistema completo de gestão de pizzaria com FastAPI e Docker
 site_author: ulissesbomjardim
-site_url: https://pizzaria.com
+site_url: https://ulissesbomjardim.github.io/FastApi---Projeto-Pizzaria/
 
 # Repository
-repo_name: pizzaria-fastapi
-repo_url: https://github.com/ulissesbomjardim/pizzaria-fastapi
+repo_name: FastApi---Projeto-Pizzaria
+repo_url: https://github.com/ulissesbomjardim/FastApi---Projeto-Pizzaria
 edit_uri: ""
 
 # Configuration
@@ -90,8 +90,6 @@ nav:
   - 🔐 Autenticação:
     - Sistema Centralizado: authentication/centralized-system.md
     - AuthManager: authentication/auth-manager.md
-    - Cross-Page Communication: authentication/cross-page.md
-    - Testes e Validação: authentication/testing.md
   - API:
     - Visão Geral: api/overview.md
     - Autenticação JWT: api/authentication.md
@@ -99,7 +97,6 @@ nav:
   - Frontend:
     - Interface: frontend/interface.md
     - Componentes: frontend/components.md
-    - Sistema de Login: frontend/login-system.md
   - Deploy:
     - Docker: deploy/docker.md
     - Produção: deploy/production.md
