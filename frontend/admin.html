@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Admin - Hashtag Pizzaria</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="alternate icon" href="favicon.ico">
+    
+    <!-- Meta CSP atualizada para WSL -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' http://172.25.132.243:8000 ws://172.25.132.243:8000; script-src 'self' 'unsafe-inline' 'unsafe-eval' cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' cdnjs.cloudflare.com fonts.googleapis.com; font-src 'self' fonts.gstatic.com cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' http://172.25.132.243:8000 ws://172.25.132.243:8000;">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
+    <link rel="stylesheet" href="assets/css/admin.css?v=14">
+    <link rel="stylesheet" href="assets/css/admin-login.css?v=11">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="admin-body">
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <!-- Logo -->
+                <div class="nav-logo">
+                    <a href="/" class="logo-link">
+                        <i class="fas fa-pizza-slice"></i>
+                        <span>Hashtag Pizzaria</span>
+                    </a>
+                </div>
+                
+                <!-- Navigation Links -->
+                <ul class="nav-menu">
+                    <li><a href="/" class="nav-link"><i class="fas fa-home"></i> Início</a></li>
+                    <li><a href="/#menu" class="nav-link"><i class="fas fa-utensils"></i> Cardápio</a></li>
+                    <li><a href="/admin.html" class="nav-link active"><i class="fas fa-cogs"></i> Admin</a></li>
+                </ul>
+                
+                <!-- User Menu -->
+                <div class="nav-actions">
+                    <button class="user-btn" id="user-btn">
+                        <i class="fas fa-user"></i>
+                        <span id="userNameDisplay">Admin</span>
+                    </button>
+                </div>
+                
+                <!-- Mobile Menu Toggle -->
+                <div class="nav-toggle" onclick="toggleMobileMenu()">
+                    <span class="toggle-bar"></span>
+                    <span class="toggle-bar"></span>
+                    <span class="toggle-bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Admin Container -->
+    <div class="admin-container" id="adminContainer">
+        <!-- Admin Header -->
+        <div class="admin-header">
+            <h1 class="admin-title">
+                <i class="fas fa-shield-alt"></i>
+                Painel Administrativo
+            </h1>
+            <p class="admin-subtitle">
+                Gerencie pedidos, cardápio e acompanhe estatísticas da pizzaria
+            </p>
+        </div>
+
+        <!-- Admin Navigation -->
+        <div class="admin-nav">
+            <div class="admin-nav-buttons">
+                <button class="admin-nav-btn active" data-view="dashboard">
+                    <i class="fas fa-chart-bar"></i>
+                    Dashboard
+                </button>
+                <button class="admin-nav-btn" data-view="orders">
+                    <i class="fas fa-list-alt"></i>
+                    Pedidos
+                </button>
+                <button class="admin-nav-btn" data-view="items">
+                    <i class="fas fa-utensils"></i>
+                    Cardápio
+                </button>
+            </div>
+        </div>
+
+        <!-- Admin Content -->
+        <div class="admin-content fade-in" id="adminContent">
+            <!-- Conteúdo será carregado dinamicamente -->
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                Carregando painel administrativo...
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer" class="notification-container"></div>
+
+    <!-- JavaScript -->
+    <script src="assets/js/config.js?v=11"></script>
+    <script src="assets/js/auth-manager.js?v=11"></script>
+    <script src="assets/js/api.js?v=11"></script>
+    <script src="assets/js/auth.js?v=11"></script>
+            <script src="./assets/js/admin.js?v=debug005"></script>
+    <script src="assets/js/test-auth.js?v=11"></script>
+    
+    <script>
+        // ===== ADMIN PAGE AUTHENTICATION WITH AUTHMANAGER =====
+        console.log('🔐 Admin page starting authentication check...');
+        
+        // Global variables for admin page
+        // adminPanel is already declared in admin.js
+        let authManager = null;
+        
+        // Initialize admin authentication
+        async function initAdminAuth() {
+            console.log('🔍 Initializing admin authentication...');
+            
+            // Wait for AuthManager to be ready
+            if (window.AuthManager) {
+                await window.AuthManager.waitForInit();
+                authManager = window.AuthManager;
+                console.log('✅ AuthManager ready for admin page');
+            } else {
+                console.warn('⚠️ AuthManager not available, using fallback');
+            }
+            
+            return checkAdminAccess();
+        }
+        
+        async function checkAdminAccess() {
+            try {
+                // Check authentication status
+                let isAuthenticated = false;
+                let currentUser = null;
+                
+                if (authManager) {
+                    isAuthenticated = authManager.isLoggedIn();
+                    currentUser = authManager.getUser();
+                } else {
+                    // Fallback check
+                    const token = localStorage.getItem('hashtag_pizzaria_token') || 
+                                 localStorage.getItem('access_token');
+                    const userData = localStorage.getItem('hashtag_pizzaria_user') ||
+                                   localStorage.getItem('user_data');
+                    
+                    if (token && userData) {
+                        try {
+                            currentUser = JSON.parse(userData);
+                            isAuthenticated = true;
+                        } catch (e) {
+                            console.warn('Invalid user data in storage');
+                        }
+                    }
+                }
+                
+                console.log('🔐 Auth check result:', { 
+                    isAuthenticated, 
+                    isAdmin: currentUser?.is_admin,
+                    username: currentUser?.username 
+                });
+                
+                if (isAuthenticated && currentUser && currentUser.is_admin) {
+                    return initAdminPanel(currentUser);
+                } else if (isAuthenticated && currentUser && !currentUser.is_admin) {
+                    showAccessDenied('Apenas administradores podem acessar esta área.');
+                } else {
+                    showLoginForm();
+                }
+                
+            } catch (error) {
+                console.error('❌ Error checking admin access:', error);
+                showLoginForm();
+            }
+        }
+        
+        async function initAdminPanel(user) {
+            try {
+                console.log('✅ Initializing admin panel for:', user.username);
+                
+                // Update header
+                const userNameDisplay = document.getElementById('userNameDisplay');
+                if (userNameDisplay) {
+                    userNameDisplay.textContent = user.username;
+                }
+                
+                // Initialize AdminPanel
+                if (typeof AdminPanel !== 'undefined') {
+                    window.adminPanel = new AdminPanel();
+                    console.log('🎛️ AdminPanel initialized successfully');
+                    showNotification(`Bem-vindo, ${user.username}!`, 'success');
+                } else {
+                    throw new Error('AdminPanel class not available');
+                }
+                
+            } catch (error) {
+                console.error('❌ Error initializing admin panel:', error);
+                showNotification('Erro ao inicializar painel administrativo', 'error');
+            }
+        }
+        
+        function showAccessDenied(message) {
+            const adminContent = document.getElementById('adminContent');
+            if (adminContent) {
+                adminContent.innerHTML = `
+                    <div class="access-denied">
+                        <div class="access-denied-card">
+                            <i class="fas fa-shield-alt"></i>
+                            <h2>Acesso Negado</h2>
+                            <p>${message}</p>
+                            <div class="access-denied-actions">
+                                <button onclick="window.location.href='/'" class="btn btn-secondary">
+                                    Voltar ao Início
+                                </button>
+                                <button onclick="logout()" class="btn btn-primary">
+                                    Fazer Logout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            showNotification(message, 'error');
+        }
+
+        
+        function showLoginForm() {
+            const adminContent = document.getElementById('adminContent');
+            if (adminContent) {
+                adminContent.innerHTML = `
+                    <div class="login-container">
+                        <div class="login-card">
+                            <div class="login-header">
+                                <i class="fas fa-pizza-slice"></i>
+                                <h2>Painel Administrativo</h2>
+                                <p>Acesso restrito para administradores</p>
+                            </div>
+                            
+                            <div class="quick-login">
+                                <h3>🚀 Login Rápido</h3>
+                                <p>Usar credenciais padrão do administrador</p>
+                                <button onclick="quickAdminLogin()" class="btn btn-success btn-block">
+                                    <i class="fas fa-bolt"></i>
+                                    Login Admin Automático
+                                </button>
+                                <small class="login-help">admin@pizzaria.com • Admin123!@#</small>
+                            </div>
+                            
+                            <div class="login-divider">
+                                <span>ou</span>
+                            </div>
+                            
+                            <form id="adminLoginForm" class="login-form">
+                                <div class="form-group">
+                                    <label for="adminEmail">Email ou Usuário:</label>
+                                    <input type="text" id="adminEmail" name="email" required 
+                                           placeholder="admin@pizzaria.com" value="admin@pizzaria.com">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="adminPassword">Senha:</label>
+                                    <input type="password" id="adminPassword" name="password" required 
+                                           placeholder="Sua senha" value="Admin123!@#">
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary btn-block">
+                                    <i class="fas fa-sign-in-alt"></i>
+                                    Entrar no Painel
+                                </button>
+                            </form>
+                            
+                            <div class="login-footer">
+                                <a href="/" class="back-link">
+                                    <i class="fas fa-arrow-left"></i>
+                                    Voltar ao site principal
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Bind login form
+            const loginForm = document.getElementById('adminLoginForm');
+            if (loginForm) {
+                loginForm.addEventListener('submit', handleAdminLogin);
+            }
+            
+            showNotification('Acesso negado. Faça login para continuar.', 'error');
+        }
+        
+        async function handleAdminLogin(e) {
+            if (e) e.preventDefault();
+            
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+            
+            if (!email || !password) {
+                showNotification('Por favor, preencha todos os campos.', 'warning');
+                return;
+            }
+            
+            console.log('🔐 Attempting admin login...');
+            
+            try {
+                let loginResult;
+                
+                if (authManager) {
+                    // Use AuthManager
+                    loginResult = await authManager.login({
+                        username: email,
+                        password: password
+                    });
+                } else {
+                    // Fallback to direct API call
+                    const baseURL = CONFIG?.API?.BASE_URL || 'http://172.25.132.243:8000';
+                    const response = await fetch(`${baseURL}/auth/login`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            email_or_username: email,
+                            password: password
+                        })
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.detail || `Login failed: ${response.status}`);
+                    }
+
+                    loginResult = await response.json();
+                    
+                    // Save auth data manually if no AuthManager
+                    if (!authManager) {
+                        const tokenKeys = ['hashtag_pizzaria_token', 'access_token', 'authToken'];
+                        const userKeys = ['hashtag_pizzaria_user', 'user_data', 'currentUser'];
+                        const refreshKeys = ['hashtag_pizzaria_refresh', 'refresh_token'];
+                        
+                        tokenKeys.forEach(key => {
+                            localStorage.setItem(key, loginResult.access_token);
+                        });
+                        
+                        userKeys.forEach(key => {
+                            localStorage.setItem(key, JSON.stringify(loginResult.user));
+                        });
+                        
+                        refreshKeys.forEach(key => {
+                            localStorage.setItem(key, loginResult.refresh_token);
+                        });
+                    }
+                }
+                
+                console.log('✅ Login successful');
+
+                if (!loginResult.user.is_admin) {
+                    showAccessDenied('Apenas administradores podem acessar esta área.');
+                    return;
+                }
+
+                showNotification('Login realizado com sucesso!', 'success');
+                
+                // Initialize admin panel
+                await initAdminPanel(loginResult.user);
+
+            } catch (error) {
+                console.error('❌ Login error:', error);
+                showNotification('Erro no login: ' + error.message, 'error');
+            }
+        }
+        
+        // Quick login function
+        window.quickAdminLogin = async function() {
+            document.getElementById('adminEmail').value = 'admin@pizzaria.com';
+            document.getElementById('adminPassword').value = 'Admin123!@#';
+            await handleAdminLogin();
+        };
+        
+        // Logout function
+        window.logout = function() {
+            if (authManager) {
+                authManager.logout();
+            } else {
+                // Fallback logout
+                const keysToRemove = [
+                    'hashtag_pizzaria_token', 'hashtag_pizzaria_refresh', 'hashtag_pizzaria_user',
+                    'access_token', 'refresh_token', 'user_data', 'currentUser', 'authToken'
+                ];
+                keysToRemove.forEach(key => {
+                    localStorage.removeItem(key);
+                    sessionStorage.removeItem(key);
+                });
+            }
+            
+            showNotification('Logout realizado com sucesso', 'success');
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 1000);
+        };
+        
+        // Initialize admin page
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('🚀 Admin page loading...');
+            
+            try {
+                // Wait for all scripts to load
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                // Initialize authentication
+                await initAdminAuth();
+
+            } catch (error) {
+                console.error('❌ Error initializing admin auth:', error);
+                showLoginForm();
+            }
+        });
+        
+        // Keyboard shortcuts for admin navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch (e.key) {
+                    case '1':
+                        e.preventDefault();
+                        adminPanel?.switchView('dashboard');
+                        break;
+                    case '2':
+                        e.preventDefault();
+                        adminPanel?.switchView('orders');
+                        break;
+                    case '3':
+                        e.preventDefault();
+                        adminPanel?.switchView('items');
+                        break;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

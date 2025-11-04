@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste API - Pizzaria</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #333;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background: #333;
+            border-radius: 3px;
+        }
+        .success { background: #27ae60; }
+        .error { background: #e74c3c; }
+    </style>
+</head>
+<body>
+    <h1>🍕 Teste API - Pizzaria</h1>
+    
+    <div class="test-section">
+        <h2>1. Teste de Conectividade</h2>
+        <button onclick="testConnection()">Testar Conexão API</button>
+        <div id="connection-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Teste Menu Items</h2>
+        <button onclick="testMenuItems()">Carregar Menu</button>
+        <div id="menu-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Teste Login</h2>
+        <button onclick="testLogin()">Testar Login</button>
+        <div id="login-result" class="result"></div>
+    </div>
+
+    <script>
+        console.log('🧪 Test page loaded');
+
+        async function testConnection() {
+            const result = document.getElementById('connection-result');
+            result.textContent = 'Testando...';
+            
+            try {
+                const response = await fetch('http://localhost:8000/');
+                const data = await response.json();
+                
+                result.className = 'result success';
+                result.textContent = '✅ Conectado! ' + JSON.stringify(data);
+            } catch (error) {
+                result.className = 'result error';
+                result.textContent = '❌ Erro: ' + error.message;
+            }
+        }
+
+        async function testMenuItems() {
+            const result = document.getElementById('menu-result');
+            result.textContent = 'Carregando menu...';
+            
+            try {
+                const response = await fetch('http://localhost:8000/items/menu');
+                const data = await response.json();
+                
+                result.className = 'result success';
+                result.textContent = `✅ Menu carregado! ${data.length} itens encontrados. 
+                Primeiro item: ${data[0] ? data[0].name : 'N/A'}`;
+            } catch (error) {
+                result.className = 'result error';
+                result.textContent = '❌ Erro ao carregar menu: ' + error.message;
+            }
+        }
+
+        async function testLogin() {
+            const result = document.getElementById('login-result');
+            result.textContent = 'Testando login...';
+            
+            try {
+                const response = await fetch('http://localhost:8000/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email_or_username: 'teste1@example.com',
+                        password: 'Minh@Senha1'
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    result.className = 'result success';
+                    result.textContent = '✅ Login funcionando! Token recebido.';
+                } else {
+                    const errorData = await response.json();
+                    result.className = 'result error';
+                    result.textContent = '❌ Erro no login: ' + errorData.detail;
+                }
+            } catch (error) {
+                result.className = 'result error';
+                result.textContent = '❌ Erro: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>

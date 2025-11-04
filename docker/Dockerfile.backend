@@ -1,0 +1,38 @@
+# Dockerfile para Backend FastAPI
+FROM python:3.12-slim
+
+# Definir diretório de trabalho
+WORKDIR /app
+
+# Instalar dependências do sistema
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+    # Copiar arquivo de dependências
+    COPY docker/requirements.txt .
+
+    # Instalar dependências Python
+RUN pip install --no-cache-dir --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copiar código do backend
+COPY backend/ ./backend/
+COPY alembic/ ./alembic/
+COPY alembic.ini .
+
+# Criar diretório para banco de dados
+RUN mkdir -p /app/backend/database
+
+# Expor porta
+EXPOSE 8000
+
+# Variáveis de ambiente
+ENV PYTHONPATH=/app
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# Comando de inicialização
+CMD ["python", "-m", "uvicorn", "backend.src.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

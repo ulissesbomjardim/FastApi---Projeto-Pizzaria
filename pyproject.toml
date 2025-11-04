@@ -1,0 +1,115 @@
+[tool.poetry]
+package-mode = false
+
+[project]
+name = "fastapi-projeto-pizzaria"
+version = "0.1.0"
+description = "Projeto FastAPI Pizzaria treinamento Hashtag"
+authors = [
+    {name = "ulissesbomjardim",email = "ulisses.bomjardim@gmail.com"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.12,<4"
+dependencies = [
+    "fastapi (>=0.120.0,<0.121.0)",
+    "uvicorn[standard] (>=0.38.0,<0.39.0)",
+    "sqlalchemy (>=2.0.44,<3.0.0)",
+    "sqlalchemy-utils (>=0.42.0,<0.43.0)",
+    "alembic (>=1.17.1,<2.0.0)",
+    "python-jose[cryptography] (>=3.5.0,<4.0.0)",
+    "passlib[bcrypt] (>=1.7.4,<2.0.0)",
+    "pydantic[email] (>=2.12.0,<3.0.0)",
+    "python-dotenv (>=1.2.0,<2.0.0)",
+    "python-multipart (>=0.0.20,<0.1.0)",
+    "email-validator (>=2.3.0,<3.0.0)",
+    "bcrypt (>=5.0.0,<6.0.0)",
+    "psycopg2-binary (>=2.9.0,<3.0.0)"
+]
+
+[dependency-groups]
+dev = [
+    "pytest (>=8.4.2,<9.0.0)",
+    "pytest-cov (>=7.0.0,<8.0.0)",
+    "pytest-asyncio (>=0.24.0,<0.25.0)",
+    "httpx (>=0.28.1,<0.29.0)",
+    "blue (>=0.9.1,<0.10.0)",
+    "isort (>=7.0.0,<8.0.0)",
+    "taskipy (>=1.14.1,<2.0.0)"
+]
+doc = [
+    "mkdocs (>=1.6.1,<2.0.0)",
+    "mkdocs-material (>=9.6.22,<10.0.0)",
+    "mkdocstrings-python (>=1.18.2,<2.0.0)",
+    "pygments (>=2.19.2,<3.0.0)",
+    "pydantic-extensions (>=0.1.0,<0.2.0)",
+    "mkdocstrings (>=0.30.1,<0.31.0)",
+    "mkdocs-drawio (>=1.12.0,<2.0.0)"
+]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+# Configurações de formatação e linting
+[tool.blue]
+line-length = 120
+exclude = '''
+/(
+    \.git
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+    | alembic
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 120
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+
+[tool.pytest.ini_options]
+testpaths = ["backend/tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short --strict-markers"
+pythonpath = ["backend"]
+markers = [
+    "unit: marks tests as unit tests",
+    "integration: marks tests as integration tests",
+    "auth: marks tests related to authentication",
+    "orders: marks tests related to orders",
+    "items: marks tests related to items",
+    "users: marks tests related to users"
+]
+asyncio_mode = "auto"
+
+# Configurações do Taskipy para automação
+[tool.taskipy.tasks]
+format = "blue . && isort ."
+lint = "blue --check . && isort --check-only ."
+test = "pytest"
+test-unit = "pytest -m unit"
+test-integration = "pytest -m integration"
+test-cov = "pytest --cov=backend/src --cov-report=html --cov-report=term-missing"
+test-cov-xml = "pytest --cov=backend/src --cov-report=xml"
+run = "cd backend && python -m uvicorn src.main:app --reload --host 0.0.0.0 --port 8000"
+run-prod = "cd backend && python -m uvicorn src.main:app --host 0.0.0.0 --port 8000"
+migrate = "cd backend && alembic upgrade head"
+migrate-create = "cd backend && alembic revision --autogenerate"
+populate = "cd backend && python populate_data.py"
+make-admin = "cd backend && python make_admin.py"
+install-deps = "poetry install --with dev,doc"
+docs-serve = "mkdocs serve"
+docs-build = "mkdocs build"
+docs-deploy = "mkdocs gh-deploy"

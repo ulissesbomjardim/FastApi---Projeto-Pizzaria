@@ -1,0 +1,44 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="pizzaBase" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" style="stop-color:#F4C2A1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#D4941E;stop-opacity:1" />
+    </radialGradient>
+    <radialGradient id="cheese" cx="50%" cy="50%" r="40%">
+      <stop offset="0%" style="stop-color:#FFF8DC;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#F0E68C;stop-opacity:0.7" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Pizza base (circle) -->
+  <circle cx="100" cy="100" r="85" fill="url(#pizzaBase)" stroke="#B8860B" stroke-width="3"/>
+  
+  <!-- Cheese layer -->
+  <circle cx="100" cy="100" r="78" fill="url(#cheese)" opacity="0.8"/>
+  
+  <!-- Pepperoni slices -->
+  <circle cx="75" cy="70" r="12" fill="#CC2936" stroke="#8B0000" stroke-width="1"/>
+  <circle cx="125" cy="65" r="12" fill="#CC2936" stroke="#8B0000" stroke-width="1"/>
+  <circle cx="90" cy="110" r="12" fill="#CC2936" stroke="#8B0000" stroke-width="1"/>
+  <circle cx="130" cy="105" r="12" fill="#CC2936" stroke="#8B0000" stroke-width="1"/>
+  <circle cx="70" cy="130" r="12" fill="#CC2936" stroke="#8B0000" stroke-width="1"/>
+  <circle cx="110" cy="140" r="12" fill="#CC2936" stroke="#8B0000" stroke-width="1"/>
+  
+  <!-- Green peppers -->
+  <ellipse cx="95" cy="80" rx="8" ry="5" fill="#228B22" stroke="#006400" stroke-width="1" transform="rotate(25 95 80)"/>
+  <ellipse cx="115" cy="85" rx="8" ry="5" fill="#228B22" stroke="#006400" stroke-width="1" transform="rotate(-15 115 85)"/>
+  <ellipse cx="80" cy="105" rx="8" ry="5" fill="#228B22" stroke="#006400" stroke-width="1" transform="rotate(45 80 105)"/>
+  <ellipse cx="120" cy="125" rx="8" ry="5" fill="#228B22" stroke="#006400" stroke-width="1" transform="rotate(-30 120 125)"/>
+  
+  <!-- Mushrooms -->
+  <ellipse cx="105" cy="75" rx="6" ry="4" fill="#8B4513" stroke="#654321" stroke-width="1"/>
+  <ellipse cx="85" cy="95" rx="6" ry="4" fill="#8B4513" stroke="#654321" stroke-width="1"/>
+  <ellipse cx="125" cy="90" rx="6" ry="4" fill="#8B4513" stroke="#654321" stroke-width="1"/>
+  <ellipse cx="95" cy="125" rx="6" ry="4" fill="#8B4513" stroke="#654321" stroke-width="1"/>
+  
+  <!-- Pizza crust highlights -->
+  <circle cx="100" cy="100" r="85" fill="none" stroke="#F4A460" stroke-width="2" opacity="0.6"/>
+  
+  <!-- Subtle shine effect -->
+  <ellipse cx="80" cy="70" rx="20" ry="15" fill="rgba(255,255,255,0.2)" transform="rotate(-20 80 70)"/>
+</svg>

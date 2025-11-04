@@ -1,0 +1,68 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="plateGradient" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" style="stop-color:#F5F5DC;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E6E6FA;stop-opacity:1" />
+    </radialGradient>
+    <linearGradient id="foodGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#FFA500;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FF6347;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Plate base -->
+  <circle cx="100" cy="100" r="85" fill="url(#plateGradient)" stroke="#D3D3D3" stroke-width="3"/>
+  <circle cx="100" cy="100" r="78" fill="#FFFFFF" opacity="0.3"/>
+  
+  <!-- Fork -->
+  <rect x="40" y="40" width="3" height="50" fill="#C0C0C0" rx="1"/>
+  <rect x="36" y="35" width="2" height="8" fill="#C0C0C0" rx="1"/>
+  <rect x="39" y="35" width="2" height="8" fill="#C0C0C0" rx="1"/>
+  <rect x="42" y="35" width="2" height="8" fill="#C0C0C0" rx="1"/>
+  <rect x="45" y="35" width="2" height="8" fill="#C0C0C0" rx="1"/>
+  
+  <!-- Knife -->
+  <rect x="155" y="45" width="3" height="45" fill="#C0C0C0" rx="1"/>
+  <path d="M155 40 L158 40 L160 45 L155 45 Z" fill="#C0C0C0"/>
+  
+  <!-- Spoon -->
+  <rect x="50" y="150" width="3" height="40" fill="#C0C0C0" rx="1"/>
+  <ellipse cx="51.5" cy="145" rx="4" ry="8" fill="#C0C0C0"/>
+  
+  <!-- Mini pizza slice -->
+  <path d="M70 70 Q80 65 90 70 L80 90 Z" fill="#D4941E" stroke="#B8860B" stroke-width="1"/>
+  <circle cx="75" cy="75" r="2" fill="#CC2936"/>
+  <ellipse cx="82" cy="73" rx="2" ry="1" fill="#228B22"/>
+  
+  <!-- Mini drink glass -->
+  <rect x="110" y="70" width="12" height="20" fill="#87CEEB" stroke="#4682B4" stroke-width="1" rx="2"/>
+  <ellipse cx="116" cy="72" rx="6" ry="2" fill="#E8F4FF"/>
+  <rect x="118" y="65" width="2" height="10" fill="#FF69B4"/>
+  
+  <!-- Mini ice cream -->
+  <circle cx="130" cy="115" r="8" fill="#FFB6C1"/>
+  <circle cx="130" cy="105" r="6" fill="#FFF8DC"/>
+  <path d="M130 123 L125 135 Q130 137 135 135 Z" fill="#DEB887"/>
+  
+  <!-- Mini appetizer -->
+  <ellipse cx="80" cy="115" rx="12" ry="6" fill="#F4A460"/>
+  <circle cx="75" cy="113" r="2" fill="#FF6347"/>
+  <circle cx="85" cy="117" r="1.5" fill="#228B22"/>
+  
+  <!-- Sparkle effects around the plate -->
+  <path d="M30 30 L32 25 L34 30 L39 28 L37 33 L42 35 L37 37 L39 42 L34 40 L32 45 L30 40 L25 42 L27 37 L22 35 L27 33 Z" 
+        fill="url(#foodGradient)" opacity="0.8"/>
+        
+  <path d="M165 30 L167 25 L169 30 L174 28 L172 33 L177 35 L172 37 L174 42 L169 40 L167 45 L165 40 L160 42 L162 37 L157 35 L162 33 Z" 
+        fill="url(#foodGradient)" opacity="0.8"/>
+        
+  <path d="M30 165 L32 160 L34 165 L39 163 L37 168 L42 170 L37 172 L39 177 L34 175 L32 180 L30 175 L25 177 L27 172 L22 170 L27 168 Z" 
+        fill="url(#foodGradient)" opacity="0.8"/>
+        
+  <path d="M165 165 L167 160 L169 165 L174 163 L172 168 L177 170 L172 172 L174 177 L169 175 L167 180 L165 175 L160 177 L162 172 L157 170 L162 168 Z" 
+        fill="url(#foodGradient)" opacity="0.8"/>
+  
+  <!-- Central shine -->
+  <ellipse cx="90" cy="80" rx="15" ry="10" fill="rgba(255,255,255,0.3)" transform="rotate(-30 90 80)"/>
+</svg>

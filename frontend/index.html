@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hashtag Pizzaria - A Melhor Pizza da Cidade</title>
+    <meta name="description" content="Peça sua pizza favorita na Hashtag Pizzaria. Sabores únicos, ingredientes frescos e entrega rápida!">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="alternate icon" href="favicon.ico">
+    
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self'; 
+        script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com; 
+        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; 
+        font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; 
+        img-src 'self' data: blob:; 
+        connect-src 'self' http://localhost:8000 http://172.25.132.243:8000;
+    ">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css?v=8">
+    <link rel="stylesheet" href="assets/css/components.css?v=8">
+    <link rel="stylesheet" href="assets/css/responsive.css?v=7">
+    
+    <!-- Filter Buttons Override -->
+    <style>
+        .menu-filters {
+            display: flex !important;
+            justify-content: center !important;
+            gap: 1rem !important;
+            margin-bottom: 3rem !important;
+            flex-wrap: wrap !important;
+            padding: 1rem !important;
+            background: rgba(26, 26, 26, 0.6) !important;
+            backdrop-filter: blur(20px) !important;
+            border-radius: 1rem !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2) !important;
+        }
+        
+        .filter-btn {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 0.5rem !important;
+            padding: 0.75rem 1.5rem !important;
+            border-radius: 0.75rem !important;
+            font-weight: 600 !important;
+            font-size: 1rem !important;
+            text-decoration: none !important;
+            border: none !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            position: relative !important;
+            overflow: hidden !important;
+            background: transparent !important;
+            color: #ffffff !important;
+            border: 2px solid #d32f2f !important;
+        }
+
+        .filter-btn::before {
+            content: '' !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: -100% !important;
+            width: 100% !important;
+            height: 100% !important;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent) !important;
+            transition: left 0.3s ease !important;
+        }
+
+        .filter-btn:hover::before {
+            left: 100% !important;
+        }
+
+        .filter-btn:hover {
+            background: #d32f2f !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15) !important;
+        }
+        
+        .filter-btn.active {
+            background: linear-gradient(135deg, #d32f2f, #ff5722) !important;
+            color: white !important;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15) !important;
+            transform: translateY(-2px) !important;
+            border-color: #d32f2f !important;
+        }
+
+        .filter-btn.active::before {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent) !important;
+        }
+
+        /* Força as imagens de categoria */
+        .menu-card-image img.category-image {
+            display: block !important;
+            object-fit: contain !important;
+            padding: 1rem !important;
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.9), rgba(42, 42, 42, 0.8)) !important;
+            backdrop-filter: blur(10px) !important;
+            width: 100% !important;
+            height: 100% !important;
+            border-radius: 0.5rem !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="pizza-loader">
+            <div class="pizza-slice"></div>
+            <div class="pizza-slice"></div>
+            <div class="pizza-slice"></div>
+            <div class="pizza-slice"></div>
+        </div>
+        <h3>Preparando sua experiência...</h3>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-pizza-slice"></i>
+                <span>Hashtag Pizzaria</span>
+            </div>
+            
+            <div class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="#home" class="nav-link active">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#menu" class="nav-link">Cardápio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#about" class="nav-link">Sobre</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#contact" class="nav-link">Contato</a>
+                    </li>
+                    <li class="nav-item admin-only" style="display: none;">
+                        <a href="admin.html" class="nav-link admin-link">
+                            <i class="fas fa-cogs"></i> Admin
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="nav-actions">
+                <button class="cart-btn" id="cart-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cart-count">0</span>
+                </button>
+                <button class="user-btn" id="user-btn">
+                    <i class="fas fa-user"></i>
+                </button>
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-background">
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="hero-content">
+            <div class="container">
+                <div class="hero-text">
+                    <h1 class="hero-title">
+                        <span class="title-main">Hashtag Pizzaria</span>
+                        <span class="title-sub">A melhor pizza da cidade</span>
+                    </h1>
+                    <p class="hero-description">
+                        Sabores únicos, ingredientes frescos e a tradição italiana 
+                        em cada fatia. Peça agora e saboreie a experiência completa!
+                    </p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" onclick="scrollToSection('menu')">
+                            <i class="fas fa-utensils"></i>
+                            Ver Cardápio
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fas fa-phone"></i>
+                            Fazer Pedido
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">500+</div>
+                        <div class="stat-label">Pizzas Vendidas</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">98%</div>
+                        <div class="stat-label">Satisfação</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">30min</div>
+                        <div class="stat-label">Entrega Média</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menu" class="menu-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Nosso Cardápio</h2>
+                <p class="section-subtitle">Escolha entre nossos sabores irresistíveis</p>
+            </div>
+
+            <!-- Menu Filters -->
+            <div class="menu-filters">
+                <button class="filter-btn active" data-filter="all">
+                    <i class="fas fa-th"></i>
+                    Todos
+                </button>
+                <button class="filter-btn" data-filter="pizza">
+                    <i class="fas fa-pizza-slice"></i>
+                    Pizzas
+                </button>
+                <button class="filter-btn" data-filter="bebida">
+                    <i class="fas fa-glass-cheers"></i>
+                    Bebidas
+                </button>
+                <button class="filter-btn" data-filter="sobremesa">
+                    <i class="fas fa-ice-cream"></i>
+                    Sobremesas
+                </button>
+                <button class="filter-btn" data-filter="entrada">
+                    <i class="fas fa-utensils"></i>
+                    Entradas
+                </button>
+                <button class="filter-btn" data-filter="promocao">
+                    <i class="fas fa-tags"></i>
+                    Promoções
+                </button>
+            </div>
+
+            <!-- Menu Grid -->
+            <div class="menu-grid" id="menu-grid">
+                <div class="menu-loading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <span>Carregando cardápio...</span>
+                </div>
+            </div>
+
+            <!-- Load More Button -->
+            <div class="menu-actions">
+                <button class="btn btn-outline" id="load-more-btn" style="display: none;">
+                    <i class="fas fa-plus"></i>
+                    Ver Mais Itens
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2 class="section-title">Nossa História</h2>
+                    <p class="about-description">
+                        A Hashtag Pizzaria nasceu da paixão pela culinária italiana autêntica. 
+                        Desde 2020, servimos pizzas artesanais com ingredientes selecionados 
+                        e receitas tradicionais, conquistando o paladar de toda a família.
+                    </p>
+                    <div class="about-features">
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-leaf"></i>
+                            </div>
+                            <div class="feature-text">
+                                <h4>Ingredientes Frescos</h4>
+                                <p>Selecionamos os melhores ingredientes diariamente</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="feature-text">
+                                <h4>Entrega Rápida</h4>
+                                <p>Sua pizza quentinha em até 30 minutos</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <div class="feature-text">
+                                <h4>Feito com Amor</h4>
+                                <p>Cada pizza é preparada com carinho e dedicação</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <div class="image-placeholder">
+                        <i class="fas fa-utensils"></i>
+                        <span>Nossos chefs em ação</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Entre em Contato</h2>
+                <p class="section-subtitle">Estamos aqui para atendê-lo</p>
+            </div>
+            
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4>Endereço</h4>
+                            <p>Rua das Pizzas, 123<br>Centro, São Paulo - SP</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4>Telefone</h4>
+                            <p>(11) 99999-9999</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4>Horário</h4>
+                            <p>Seg - Dom: 18h às 23h</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4>Email</h4>
+                            <p>contato@hashtagpizzaria.com</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <form id="contact-form">
+                        <div class="form-group">
+                            <input type="text" id="name" name="name" placeholder="Seu Nome" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="email" name="email" placeholder="Seu Email" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="tel" id="phone" name="phone" placeholder="Seu Telefone">
+                        </div>
+                        <div class="form-group">
+                            <textarea id="message" name="message" placeholder="Sua Mensagem" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i>
+                            Enviar Mensagem
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-pizza-slice"></i>
+                        <span>Hashtag Pizzaria</span>
+                    </div>
+                    <p class="footer-description">
+                        A melhor pizzaria da cidade, servindo sabores únicos desde 2020.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-title">Links Rápidos</h4>
+                    <ul class="footer-links">
+                        <li><a href="#home">Início</a></li>
+                        <li><a href="#menu">Cardápio</a></li>
+                        <li><a href="#about">Sobre</a></li>
+                        <li><a href="#contact">Contato</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-title">Horários</h4>
+                    <ul class="footer-info">
+                        <li>Segunda a Domingo</li>
+                        <li>18:00 - 23:00</li>
+                        <li>Delivery disponível</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Hashtag Pizzaria. Todos os direitos reservados.</p>
+                <p>Desenvolvido com <i class="fas fa-heart"></i> pela equipe Hashtag</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Seu Pedido</h3>
+            <button class="cart-close" id="cart-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="cart-content">
+            <div class="cart-items" id="cart-items">
+                <div class="empty-cart">
+                    <i class="fas fa-shopping-cart"></i>
+                    <p>Seu carrinho está vazio</p>
+                    <span>Adicione itens do nosso cardápio!</span>
+                </div>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total: R$ <span id="cart-total">0,00</span></span>
+            </div>
+            <button class="btn btn-primary cart-checkout" id="cart-checkout" disabled>
+                <i class="fas fa-credit-card"></i>
+                Finalizar Pedido
+            </button>
+        </div>
+    </div>
+
+    <!-- Auth Modal -->
+    <div class="modal" id="auth-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="auth-title">Entrar</h3>
+                <button class="modal-close" id="auth-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" data-tab="login">Entrar</button>
+                    <button class="auth-tab" data-tab="register">Cadastrar</button>
+                </div>
+                
+                <form id="auth-form">
+                    <div class="auth-content" id="login-content">
+                        <div class="form-group">
+                            <input type="email" id="login-email" name="email" placeholder="Email" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" id="login-password" name="password" placeholder="Senha" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Entrar
+                        </button>
+                    </div>
+                    
+                    <div class="auth-content" id="register-content" style="display: none;">
+                        <div class="form-group">
+                            <input type="text" id="register-name" name="name" placeholder="Nome completo" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="register-username" name="username" placeholder="Nome de usuário" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="register-email" name="email" placeholder="Email" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" id="register-password" name="password" placeholder="Senha (mín. 8 caracteres)" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" id="register-confirm" name="confirm_password" placeholder="Confirmar senha" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-user-plus"></i>
+                            Cadastrar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <div class="notification-content">
+            <div class="notification-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="notification-text">
+                <span class="notification-title">Sucesso!</span>
+                <span class="notification-message">Operação realizada com sucesso.</span>
+            </div>
+            <button class="notification-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/config.js?v=10"></script>
+    <script src="assets/js/auth-manager.js?v=10"></script>
+    <script src="assets/js/api.js?v=10"></script>
+    <script src="assets/js/auth.js?v=10"></script>
+    <script src="assets/js/cart.js?v=10"></script>
+    <script src="assets/js/menu.js?v=10"></script>
+    <script src="assets/js/main.js?v=10"></script>
+    
+    <script>
+        // Cross-page authentication sharing for admin access
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'REQUEST_AUTH_DATA') {
+                console.log('🔗 Auth data requested by child window');
+                
+                // Use AuthManager if available, otherwise fallback to localStorage
+                let token = null;
+                let user = null;
+                
+                if (window.AuthManager && window.AuthManager.isLoggedIn()) {
+                    token = window.AuthManager.getToken();
+                    user = window.AuthManager.getUser();
+                } else {
+                    token = localStorage.getItem('hashtag_pizzaria_token') || 
+                           localStorage.getItem('access_token');
+                    const userData = localStorage.getItem('hashtag_pizzaria_user') || 
+                                   localStorage.getItem('user_data');
+                    if (userData) {
+                        try {
+                            user = JSON.parse(userData);
+                        } catch (e) {
+                            console.warn('Invalid user data');
+                        }
+                    }
+                }
+                
+                if (token && user) {
+                    event.source.postMessage({
+                        type: 'AUTH_DATA_RESPONSE',
+                        token: token,
+                        user: user,
+                        timestamp: Date.now()
+                    }, '*');
+                    console.log('📤 Auth data sent to child window');
+                } else {
+                    console.log('❌ No auth data available to share');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

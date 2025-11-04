@@ -1,0 +1,54 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="glassGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E8F4FF;stop-opacity:0.9" />
+      <stop offset="50%" style="stop-color:#B3D9FF;stop-opacity:0.7" />
+      <stop offset="100%" style="stop-color:#87CEEB;stop-opacity:0.8" />
+    </linearGradient>
+    <linearGradient id="liquidGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF6B35;stop-opacity:0.9" />
+      <stop offset="30%" style="stop-color:#F7931E;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#FFD23F;stop-opacity:0.9" />
+    </linearGradient>
+    <radialGradient id="bubbleGradient" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#FFFFFF;stop-opacity:0.2" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Glass body -->
+  <path d="M60 60 Q58 58 60 56 L140 56 Q142 58 140 60 L135 170 Q135 175 130 175 L70 175 Q65 175 65 170 Z" 
+        fill="url(#glassGradient)" stroke="#4682B4" stroke-width="2"/>
+  
+  <!-- Liquid -->
+  <path d="M65 170 L135 170 Q135 175 130 175 L70 175 Q65 175 65 170 Z" fill="url(#liquidGradient)"/>
+  <path d="M67 85 Q67 83 69 83 L131 83 Q133 83 133 85 L130 165 L70 165 Z" fill="url(#liquidGradient)"/>
+  
+  <!-- Liquid surface (wavy) -->
+  <path d="M69 85 Q80 83 90 85 Q100 87 110 85 Q120 83 131 85" fill="none" stroke="#FF4500" stroke-width="2"/>
+  
+  <!-- Glass rim -->
+  <ellipse cx="100" cy="58" rx="40" ry="4" fill="#E8F4FF" stroke="#4682B4" stroke-width="2"/>
+  
+  <!-- Bubbles -->
+  <circle cx="85" cy="140" r="4" fill="url(#bubbleGradient)"/>
+  <circle cx="105" cy="125" r="3" fill="url(#bubbleGradient)"/>
+  <circle cx="115" cy="145" r="2" fill="url(#bubbleGradient)"/>
+  <circle cx="90" cy="110" r="2.5" fill="url(#bubbleGradient)"/>
+  <circle cx="110" cy="105" r="2" fill="url(#bubbleGradient)"/>
+  <circle cx="95" cy="155" r="3" fill="url(#bubbleGradient)"/>
+  
+  <!-- Glass shine -->
+  <path d="M75 60 Q77 58 75 56 L85 56 Q87 58 85 60 L80 160" 
+        fill="rgba(255,255,255,0.4)" stroke="rgba(255,255,255,0.6)" stroke-width="1"/>
+  
+  <!-- Straw -->
+  <rect x="110" y="30" width="4" height="50" fill="#FF69B4" rx="2"/>
+  <rect x="109" y="28" width="6" height="4" fill="#FF1493" rx="2"/>
+  
+  <!-- Straw stripes -->
+  <rect x="110" y="35" width="4" height="2" fill="#FF1493"/>
+  <rect x="110" y="45" width="4" height="2" fill="#FF1493"/>
+  <rect x="110" y="55" width="4" height="2" fill="#FF1493"/>
+  <rect x="110" y="65" width="4" height="2" fill="#FF1493"/>
+</svg>
