@@ -1,6 +1,23 @@
-# 🍕 Hashtag Pizzaria - Sistema Completo
+## 🍕 Hashtag Pizzaria - Sistema Completo
 
 Sistema moderno e completo de gestão de pizzaria com **FastAPI**, **PostgreSQL**, **Docker** e frontend responsivo. Inclui autenticação JWT robusta, painel administrativo, cardápio dinâmico, sistema de pedidos em tempo real, notificações inteligentes e automação completa de desenvolvimento via Docker.
+
+## 📚 Documentação
+
+A documentação completa do projeto está disponível no **GitHub Pages** na branch `docs`:
+
+**🔗 [Documentação Online](https://ulissesbomjardim.github.io/FastApi---Projeto-Pizzaria/)**
+
+### Seções da Documentação:
+- 🏠 **[Home](https://ulissesbomjardim.github.io/FastApi---Projeto-Pizzaria/)** - Visão geral do projeto
+- 📖 **[Guias de Desenvolvimento](https://ulissesbomjardim.github.io/FastApi---Projeto-Pizzaria/guides/development/)** - Como desenvolver e contribuir
+- 🤖 **[Instruções para IA](https://ulissesbomjardim.github.io/FastApi---Projeto-Pizzaria/guides/ai-instructions/)** - Regras obrigatórias para manter consistência
+- 🔐 **[Sistema de Autenticação](https://ulissesbomjardim.github.io/FastApi---Projeto-Pizzaria/authentication/centralized-system/)** - Documentação do AuthManager
+- 🛠️ **[API Reference](https://ulissesbomjardim.github.io/FastApi---Projeto-Pizzaria/api/overview/)** - Endpoints e exemplos
+- 🎨 **[Interface](https://ulissesbomjardim.github.io/FastApi---Projeto-Pizzaria/frontend/interface/)** - Componentes do frontend
+- 🐳 **[Deploy Docker](https://ulissesbomjardim.github.io/FastApi---Projeto-Pizzaria/deploy/docker/)** - Guia de deployment
+
+> 📝 **Nota**: A documentação é gerada automaticamente com **MkDocs Material** a partir dos arquivos markdown na pasta `docs/`.
 
 ## 📝 Descrição
 
