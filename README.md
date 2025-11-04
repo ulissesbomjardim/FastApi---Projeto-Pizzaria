@@ -292,6 +292,14 @@ Também criado automaticamente para testes:
 - **Sincronização entre tabs** - Estado compartilhado via localStorage events
 - **Fallbacks robustos** - Sistema funciona mesmo com AuthManager desabilitado
 
+### 🔧 **Correções Críticas CORS e Validação (MAIS RECENTE!)**
+- **CORS configurado com origens específicas** - Resolvido problema de wildcard com credentials
+- **Schema ItemSize expandido** - Suporte completo a bebidas (350ml, 500ml, 1l, 2l), sobremesas (único)
+- **Função safe_float()** - Garantia de precisão decimal para valores monetários
+- **CSP headers atualizados** - Content Security Policy corrigido para localhost:8000
+- **Cache busting incrementado** - Forçar reload de arquivos atualizados no navegador
+- **API URL corrigida** - Frontend usando localhost:8000 em vez do IP Docker interno
+
 ### ✅ Sistema de Notificações Inteligente
 - **Notificações visuais** com cores específicas (verde, vermelho, amarelo, azul)
 - **Mensagens detalhadas** capturadas diretamente da API
@@ -676,7 +684,91 @@ curl -X POST "http://localhost:8000/auth/create-admin" \
      }'
 ```
 
-## 🐳 Comandos Docker Úteis
+## � Garantias de Build Docker
+
+### ✅ **Todos os Ajustes Incluídos no Docker**
+
+O sistema foi projetado para ser **completamente self-contained** no Docker. Todos os ajustes e correções implementados estão automáticamente incluídos:
+
+#### 🔧 **Backend (Container: pizzaria_backend)**
+- ✅ **CORS configurado** com origens específicas (`localhost:3000`, `127.0.0.1:3000`)
+- ✅ **Função safe_float()** para valores monetários precisos
+- ✅ **Schema ItemSize completo** com todos os tamanhos (pizzas, bebidas, sobremesas)
+- ✅ **Alembic migration** com ChoiceType corrigido
+- ✅ **Usuários padrão** criados automaticamente (admin + teste)
+- ✅ **Menu populado** com 23 itens de todas as categorias
+
+#### 🌐 **Frontend (Container: pizzaria_frontend)**  
+- ✅ **CSP headers** configurados para localhost:8000
+- ✅ **API URLs** apontando para localhost:8000
+- ✅ **Cache busting** atualizado (config.js v12)
+- ✅ **AuthManager centralizado** com múltiplas chaves
+- ✅ **Admin panel** com login integrado
+
+#### 🗄️ **Banco de Dados (Container: pizzaria_postgres)**
+- ✅ **Schema criado** automaticamente
+- ✅ **Migration executada** na inicialização  
+- ✅ **Dados populados** via scripts de setup
+- ✅ **Health checks** configurados
+
+### 🎯 **Deploy com Zero Configuração**
+
+Para deployar o sistema em qualquer ambiente, você só precisa:
+
+1. **Clonar o repositório:**
+   ```bash
+   git clone https://github.com/ulissesbomjardim/FastApi---Projeto-Pizzaria.git
+   cd "FastApi - Projeto Pizzaria"
+   ```
+
+2. **Criar arquivo .env:**
+   ```bash
+   # Copiar o .env de exemplo (já configurado)
+   cp .env.example .env
+   # Ou usar os valores padrão já documentados
+   ```
+
+3. **Iniciar com Docker:**
+   ```bash
+   docker-compose up -d
+   ```
+
+4. **Acessar o sistema:**
+   - Frontend: http://localhost:3000  
+   - API: http://localhost:8000
+   - Admin: http://localhost:3000/admin.html
+
+**🎉 Não é necessário refazer nenhum ajuste manual!**
+
+### 🔄 **Rebuild Seguro**
+
+Mesmo após rebuild completo, todos os ajustes são preservados:
+
+```bash
+# Rebuild completo - mantém todos os ajustes
+docker-compose down -v
+docker-compose build --no-cache  
+docker-compose up -d
+
+# Verificar que tudo funciona
+curl http://localhost:8000          # ✅ Backend
+curl http://localhost:3000          # ✅ Frontend  
+curl http://localhost:8000/items/menu  # ✅ 23 itens carregados
+```
+
+### 📦 **Volumes e Persistência**
+
+```yaml
+# docker-compose.yml - Volumes configurados
+volumes:
+  postgres_data:           # ✅ Banco persiste entre rebuilds
+  
+# Mapeamentos importantes:
+- ./backend:/app/backend   # ✅ Código backend em sync
+- ./frontend:/usr/share/nginx/html  # ✅ Frontend em sync
+```
+
+## �🐳 Comandos Docker Úteis
 
 ### Gerenciamento de Containers
 ```bash
